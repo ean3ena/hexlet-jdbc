@@ -14,9 +14,15 @@ public class Application {
                 statement.execute(sql);
             }
 
-            var sql2 = "INSERT INTO users (username, phone) VALUES ('tommy', '123456789')";
-            try (var statement2 = conn.createStatement()) {
-                statement2.executeUpdate(sql2);
+            var sql2 = "INSERT INTO users (username, phone) VALUES (?, ?)";
+            try (var preparedStatement2 = conn.prepareStatement(sql2)) {
+                preparedStatement2.setString(1, "Tommy");
+                preparedStatement2.setString(2, "333333");
+                preparedStatement2.executeUpdate();
+
+                preparedStatement2.setString(1, "Bob");
+                preparedStatement2.setString(2, "777777");
+                preparedStatement2.executeUpdate();
             }
 
             var sql3 = "SELECT * FROM users";
