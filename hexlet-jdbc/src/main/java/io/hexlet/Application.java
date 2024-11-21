@@ -14,25 +14,15 @@ public class Application {
                 statement.execute(sql);
             }
 
-            var sql2 = "INSERT INTO users (username, phone) VALUES (?, ?)";
-            try (var preparedStatement2 = conn.prepareStatement(sql2)) {
-                preparedStatement2.setString(1, "Tommy");
-                preparedStatement2.setString(2, "333333");
-                preparedStatement2.executeUpdate();
+            var dao = new UserDAO(conn);
 
-                preparedStatement2.setString(1, "Bob");
-                preparedStatement2.setString(2, "777777");
-                preparedStatement2.executeUpdate();
-            }
+            var user = new User("Maria", "88888888");
+            System.out.println(user.getId());
+            dao.save(user);
+            System.out.println(user.getId());
 
-            var sql3 = "SELECT * FROM users";
-            try (var statement3 = conn.createStatement()) {
-                var resultSet = statement3.executeQuery(sql3);
-                while (resultSet.next()) {
-                    System.out.println(resultSet.getString("username"));
-                    System.out.println(resultSet.getString("phone"));
-                }
-            }
+            var user2 = dao.find(user.getId()).get();
+            System.out.println(user2.getId() == user.getId());
         }
     }
 }
